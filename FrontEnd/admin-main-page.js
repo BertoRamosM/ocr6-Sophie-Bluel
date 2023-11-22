@@ -7,14 +7,14 @@ let deletedWorks = [];
 
 
 export function displayAdminPage() {
+    
     document.body.innerHTML = adminPage;
 
     displayGallery(works);
 
 
     const modal = document.querySelector(".modal-container");
-
-
+    
     function displayModalGallery() {
         const modalGallery = document.querySelector(".gallery-modal");
 
@@ -42,12 +42,34 @@ export function displayAdminPage() {
 
 
 
-            //delete icon functionality
+            //delete functionality
             binElement.addEventListener("click", function () {
-                works.splice(i, 1);
-                displayModalGallery();
-                displayGallery(works);
-            })
+                //get the index of the itm to be deletd
+                const workIdToDelete = works[i].id; 
+                const token = localStorage.getItem("token");
+
+                fetch(`http://localhost:5678/api/works/${workIdToDelete}`, {
+                    method: "DELETE",
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log("work removed");
+                            works.splice(i, 1);
+
+                            displayModalGallery();
+                            displayGallery(works);
+                        } else {
+                            throw new Error('Failed to delete work');
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
+            });
+
         }
 
     }
@@ -68,23 +90,21 @@ export function displayAdminPage() {
     }
     logOut();
 
-
+    let isModalVisible = false;
 
 
     function showModal() {
         const back = document.querySelector(".back-overlay");
-        const displayModal = document.querySelectorAll(".mod");
-
-
+        const displayModal = document.querySelectorAll(".mod"); 
         displayModal.forEach(displayModal => {
             displayModal.addEventListener("click", function () {
                 modal.style.display = "block";
                 back.style.display = "block";
+                isModalVisible = true;
             })
         })
     }
     showModal();
-
 
 
 
@@ -95,11 +115,24 @@ export function displayAdminPage() {
         xSign.addEventListener("click", function () {
             modal.style.display = "none";
             back.style.display = 'none';
-
+            isModalVisible = false;
         })
     }
     closeModal();
 
+    
+    /*function closeModalOnClick(modal) {
+        const back = document.querySelector(".back-overlay");
+        document.addEventListener('click', function(event) {
+            const isClickInsideModal = modal.contains(event.target);
+            if (isModalVisible && !isClickInsideModal) {
+                modal.style.display = 'none';
+                back.style.display = "none";
+                isModalVisible = false;
+            }
+        });
+    }
+    closeModalOnClick(modal)*/
 
 
 
@@ -132,6 +165,7 @@ export function displayAdminPage() {
 
             const fileInput = document.getElementById('file');
             const imageFile = document.querySelector(".img-input");
+            let newImage = null;
 
             fileInput.addEventListener('change', function (event) {
                 const file = event.target.files[0];
@@ -188,36 +222,37 @@ export function displayAdminPage() {
 
 
             }
+
+            
             photoInput.addEventListener('change', checkInputs);
             textInput.addEventListener('input', checkInputs);
             selectInput.addEventListener('change', checkInputs);
 
 
 
-            let newImage = null;
+
 
 
             //SUBMIT FORM DOSNT WORKKKKKK 
             const submitModalForm = document.querySelector(".btn-ajouter2");
-
-            submitModalForm.addEventListener("click", async function (event) {
+            submitModalForm.addEventListener("click", function (event) {
                 event.preventDefault();
-
-
                 const formData = new FormData();
-
+                formData.append("id", 1);
                 if (newImage !== null) {
                     formData.append('image', newImage);
                 }
                 formData.append('title', textInput.value);
-                formData.append('category', selectInput.value);
-
-                console.log({ ...formData })
-
+                formData.append('categoryId', selectInput.value);
+                formData.append('userId', 1);
 
                 const token = localStorage.getItem("token");
 
-                await fetch('http://localhost:5678/api/works', {
+                console.log(textInput.value + selectInput.value + newImage)
+                console.log('Form Data:', formData);
+                console.log('Token:', token);
+
+                fetch('http://localhost:5678/api/works', {
                     method: "POST",
                     headers: {
                         Authorization: `Bearer ${token}`,
