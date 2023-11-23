@@ -649,12 +649,13 @@ input:hover {
 
 .modal-container {
 	display: none;
-	position: absolute;
-	top: 90%;
-	right: 25%;
+	position: fixed;
+	top: 2%;
+	right: 27%;
 	transform: translate(-50%, -50%);
 	background-color: white;
 	z-index: 99999;
+	
 
 }
 

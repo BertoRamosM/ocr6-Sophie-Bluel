@@ -2,8 +2,6 @@ import { displayGallery } from "./gallery.js";
 import { works } from "./main.js";
 import { adminPage, modal1, modal2 } from "./admin-page-content.js";
 
-//new array to dont loose the deleted items?????
-let deletedWorks = [];
 
 
 export function displayAdminPage() {
@@ -230,53 +228,51 @@ export function displayAdminPage() {
 
 
 
+            
 
-
+            
 
             //SUBMIT FORM DOSNT WORKKKKKK 
             const submitModalForm = document.querySelector(".btn-ajouter2");
             submitModalForm.addEventListener("click", function (event) {
                 event.preventDefault();
-                const formData = new FormData();
-                formData.append("id", 1);
-                if (newImage !== null) {
-                    formData.append('image', newImage);
-                }
-                formData.append('title', textInput.value);
-                formData.append('categoryId', selectInput.value);
-                formData.append('userId', 1);
 
                 const token = localStorage.getItem("token");
 
-                console.log(textInput.value + selectInput.value + newImage)
-                console.log('Form Data:', formData);
-                console.log('Token:', token);
 
-                fetch('http://localhost:5678/api/works', {
-                    method: "POST",
+                const textInput = document.querySelector('.title-input').value;
+                const categoryInput = document.querySelector('.category-input').value;
+                const photoInput = document.querySelector('.photo-input').files[0];
+
+                const imageData = {
+                    title: textInput,
+                    imageUrl: photoInput, 
+                    categoryId: categoryInput,
+                    userId: 0, 
+                };
+                 console.log(imageData);
+                const formData = new FormData();
+                formData.append('data', JSON.stringify(imageData)); 
+                fetch('http://localhost:5678/api/works/', {
+                    method: 'POST',
                     headers: {
-                        Authorization: `Bearer ${token}`,
-
+                        Authorization: `Bearer ${token}`, 
                     },
-                    body: formData,
+                    body: formData
                 })
-                    .then(response => {
-                        if (response.ok) {
-                            console.log("New work added", response);
-                            return response.json();
-                        } else {
-                            throw new Error('ERROR');
-                        }
-                    })
-                    .then(data => {
-                        console.log("Response Data:", data);
-                        works = data;
-                    })
-                    .catch(error => {
-                        console.log("ERROR:", error);
-                    });
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Erreur lors de la soumission des données');
+                })
+                .then(data => {
+                    console.log('Données envoyées avec succès:', data);
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                });
             });
-
 
 
         })
