@@ -68,7 +68,7 @@ export const adminPage = `
   <h3>Ajout photo</h3>
 
   <img src="./assets/icons/arrow-left.svg" alt="arrow-left" class="arrow-left">
-  <img src="./assets/icons/xmark.svg" alt="close-modal" class="x-modal">
+  <img src="./assets/icons/xmark.svg" alt="close-modal" class="x-modal x-modal2">
 
 
   <form class="modal-form">
@@ -89,9 +89,9 @@ export const adminPage = `
       <label for="Category" class="modal-form-text">Category</label>
       <select class="category-input">
           <option value="" disabled selected></option>
-          <option value="category1">Objets</option>
-          <option value="category2">Appartaments</option>
-          <option value="category3">Hôtels & restaurants</option>
+          <option value="1">Objets</option>
+          <option value="2">Appartaments</option>
+          <option value="3">Hôtels & restaurants</option>
       </select>
       
       <div class="border-modal"></div>

@@ -1,19 +1,19 @@
 import { displayGallery } from "./gallery.js";
 import { works } from "./main.js";
-import { adminPage} from "./admin-page-content.js";
+import { adminPage } from "./admin-page-content.js";
 
 
 
 export function displayAdminPage() {
 
-    
+
     document.body.innerHTML = adminPage;
 
     displayGallery(works);
 
 
     const modal = document.querySelector(".modal-container");
-    
+
     function displayModalGallery() {
         const modalGallery = document.querySelector(".gallery-modal");
 
@@ -44,7 +44,7 @@ export function displayAdminPage() {
             //delete functionality
             binElement.addEventListener("click", function () {
                 //get the index of the itm to be deletd
-                const workIdToDelete = works[i].id; 
+                const workIdToDelete = works[i].id;
                 const token = localStorage.getItem("token");
 
                 fetch(`http://localhost:5678/api/works/${workIdToDelete}`, {
@@ -81,185 +81,187 @@ export function displayAdminPage() {
     logout.addEventListener("click", logOut)
 
     function logOut() {
-            window.localStorage.removeItem("token");
-            location.href = "/index.html";
-        }
+        window.localStorage.removeItem("token");
+        location.href = "/index.html";
+    }
 
 
 
     //display and hide the modal
-        const back = document.querySelector(".back-overlay");
+    const back = document.querySelector(".back-overlay");
 
-        //those are the buttons that display the modal
-        const displayModal = document.querySelectorAll(".mod");
-        
-
-        function closeModalXButton(){
-            const xSign = document.querySelector(".x-modal");
-            xSign.addEventListener("click", closeModal);
-        }
-        closeModalXButton();
-        
-        let isModalVisible = false;
-    
-        function showModal() {
-            modal.classList.remove("modal-container-close");
-            modal.style.display = "block";
-            back.style.display = "block";
-            isModalVisible = true;
-        }
-        
-    
-        function closeModal() {
-            modal.classList.add("modal-container-close");
-            modal1.classList.add("modal-container-close");
-            modal2.classList.add("modal-container-close");
-            setTimeout(() => {
-                modal.style.display = "none";
-                modal1.style.display = "none";
-                modal2.style.display = "none";
-                back.style.display = 'none';
-                isModalVisible = false;
-                modal.classList.remove("modal-container-close");
-                modal1.classList.remove("modal-container-close");
-                modal2.classList.remove("modal-container-close");
-            }, 200);
-        }
-        
-    
-      
-       
-    
-        displayModal.forEach(displayModal => {
-            displayModal.addEventListener("click", function (event) {
-                //event propagations its used toavoid closing rhe modal when clicking on it
-                event.stopPropagation(); 
-                showModal();
-            });
-        });
-    
-        modal.addEventListener("click", function (event) {
-            event.stopPropagation();
-            const isClickInsideModal = modal.contains(event.target);
-            if (!isClickInsideModal) {
-                closeModal();
-            }
-        });
-    
-        document.addEventListener("click", function (event) {
-            event.stopPropagation();
-            if (isModalVisible === true) {
-                closeModal();
-            }
-        });
- 
-    
-    
-    //change the modal to the form to add new work
-        const btnDisplayForm = document.querySelector(".btn-ajouter");
+    //those are the buttons that display the modal
+    const displayModal = document.querySelectorAll(".mod");
 
 
-        const modal1 = document.querySelector(".modal1");
-        const modal2 = document.querySelector(".modal2");
+    function closeModalXButton() {
+        const xSign = document.querySelector(".x-modal");
+        const xSign2 = document.querySelector(".x-modal2");
+        xSign.addEventListener("click", closeModal);
+        xSign2.addEventListener("click", closeModal);
+    }
+    closeModalXButton();
 
-        
+    let isModalVisible = false;
 
-        modal2.addEventListener("click", function(event){
-            event.stopPropagation();
-    
-        })
-        btnDisplayForm.addEventListener("click", function () {
-            
+    function showModal() {
+        modal.classList.remove("modal-container-close");
+        modal.style.display = "block";
+        back.style.display = "block";
+        isModalVisible = true;
+    }
+
+
+    function closeModal() {
+        modal.classList.add("modal-container-close");
+        modal1.classList.add("modal-container-close");
+        modal2.classList.add("modal-container-close");
+        setTimeout(() => {
+            modal.style.display = "none";
             modal1.style.display = "none";
-            modal2.style.display = "block";
-        
-            
-
-            //by default the button dosnt trigger the file exploer
-            const buttonFileForm = document.querySelector('.button-file-form');
-            buttonFileForm.addEventListener('click', function () {
-                document.querySelector('.photo-input').click();
-            });
-
-            //left arrow functionality to go back to previous modal
-            document.querySelector(".arrow-left").addEventListener("click", function () {
-                modal1.style.display = "block";
-                modal2.style.display = "none";
-            })
-            
-
-            const fileInput = document.getElementById('file');
-            const imageFile = document.querySelector(".img-input");
-            let newImage = null;
-
-            fileInput.addEventListener('change', function (event) {
-                const file = event.target.files[0];
-
-                if (file) {
-                    const reader = new FileReader();
-
-                    // When the file is read, set the background image and update file name display
-                    reader.onload = function (e) {
-                        imageFile.src = e.target.result;
-                        const fileLabel = document.querySelector(".custom-file-label");
-                        fileLabel.innerHTML = "";
-                        fileLabel.innerHTML = `<img src="${e.target.result}" alt="uploaded file" class="img-uploaded">`;                        // Store the file in a variable
-                        newImage = file;
-                    };
-
-                    // Read the file as a data URL
-                    reader.readAsDataURL(file);
-                } else {
-                    // Handle case where no file is selected
-                    return;
-                }
-            });
-        
-
-           
-            //if all inputs in the form arre filled ...
-            const photoInput = document.querySelector(".photo-input");
-            const textInput = document.querySelector(".title-input");
-            const selectInput = document.querySelector(".category-input");
-            const submitButton = document.querySelector(".btn-ajouter2");
-
-            function checkInputs() {
-                let formFilled = false;
+            modal2.style.display = "none";
+            back.style.display = 'none';
+            isModalVisible = false;
+            modal.classList.remove("modal-container-close");
+            modal1.classList.remove("modal-container-close");
+            modal2.classList.remove("modal-container-close");
+        }, 200);
+    }
 
 
-                if (
-                    photoInput.files.length > 0 &&
-                    textInput.value.trim() !== "" &&
-                    selectInput.value !== ""
-                ) {
-                    formFilled = true;
-                } else {
-                    formFilled = false;
-                }
-
-                if (formFilled === true) {
-                    submitButton.classList.add("btn-ajouter2-active");
-                    submitButton.disabled = false;
-                } else if (formFilled === false) {
-                    submitButton.classList.remove("btn-ajouter2-active");
-                    submitButton.disabled = true;
-                }
 
 
+
+    displayModal.forEach(displayModal => {
+        displayModal.addEventListener("click", function (event) {
+            //event propagations its used toavoid closing rhe modal when clicking on it
+            event.stopPropagation();
+            showModal();
+        });
+    });
+
+    modal.addEventListener("click", function (event) {
+        event.stopPropagation();
+        const isClickInsideModal = modal.contains(event.target);
+        if (!isClickInsideModal) {
+            closeModal();
+        }
+    });
+
+    document.addEventListener("click", function (event) {
+        event.stopPropagation();
+        if (isModalVisible === true) {
+            closeModal();
+        }
+    });
+
+
+
+    //change the modal to the form to add new work
+    const btnDisplayForm = document.querySelector(".btn-ajouter");
+
+
+    const modal1 = document.querySelector(".modal1");
+    const modal2 = document.querySelector(".modal2");
+
+
+
+    modal2.addEventListener("click", function (event) {
+        event.stopPropagation();
+
+    })
+    btnDisplayForm.addEventListener("click", function () {
+
+        modal1.style.display = "none";
+        modal2.style.display = "block";
+
+
+
+        //by default the button dosnt trigger the file exploer
+        const buttonFileForm = document.querySelector('.button-file-form');
+        buttonFileForm.addEventListener('click', function () {
+            document.querySelector('.photo-input').click();
+        });
+
+        //left arrow functionality to go back to previous modal
+        document.querySelector(".arrow-left").addEventListener("click", function () {
+            modal1.style.display = "block";
+            modal2.style.display = "none";
+        })
+
+
+        const fileInput = document.getElementById('file');
+        const imageFile = document.querySelector(".img-input");
+        let newImage = null;
+
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+
+                // When the file is read, set the background image and update file name display
+                reader.onload = function (e) {
+                    imageFile.src = e.target.result;
+                    const fileLabel = document.querySelector(".custom-file-label");
+                    fileLabel.innerHTML = "";
+                    fileLabel.innerHTML = `<img src="${e.target.result}" alt="uploaded file" class="img-uploaded">`;                        // Store the file in a variable
+                    newImage = file;
+                };
+
+                // Read the file as a data URL
+                reader.readAsDataURL(file);
+            } else {
+                // Handle case where no file is selected
+                return;
             }
-        
-
-            
-            photoInput.addEventListener('change', checkInputs);
-            textInput.addEventListener('input', checkInputs);
-            selectInput.addEventListener('change', checkInputs);
+        });
 
 
 
-            
+        //if all inputs in the form arre filled ...
+        const photoInput = document.querySelector(".photo-input");
+        const textInput = document.querySelector(".title-input");
+        const selectInput = document.querySelector(".category-input");
+        const submitButton = document.querySelector(".btn-ajouter2");
 
-            
+        function checkInputs() {
+            let formFilled = false;
 
+
+            if (
+                photoInput.files.length > 0 &&
+                textInput.value.trim() !== "" &&
+                selectInput.value !== ""
+            ) {
+                formFilled = true;
+            } else {
+                formFilled = false;
+            }
+
+            if (formFilled === true) {
+                submitButton.classList.add("btn-ajouter2-active");
+                submitButton.disabled = false;
+            } else if (formFilled === false) {
+                submitButton.classList.remove("btn-ajouter2-active");
+                submitButton.disabled = true;
+            }
+
+
+        }
+
+
+
+        photoInput.addEventListener('change', checkInputs);
+        textInput.addEventListener('input', checkInputs);
+        selectInput.addEventListener('change', checkInputs);
+
+
+
+
+
+
+        function showModalFormWindow() {
             //SUBMIT FORM DOSNT WORKKKKKK 
             const submitModalForm = document.querySelector(".btn-ajouter2");
             submitModalForm.addEventListener("click", function (event) {
@@ -272,45 +274,48 @@ export function displayAdminPage() {
                 const categoryInput = document.querySelector('.category-input').value;
                 const photoInput = document.querySelector('.photo-input').files[0];
 
-                const imageData = {
-                    title: textInput,
-                    imageUrl: photoInput, 
-                    categoryId: categoryInput,
-                    userId: 0, 
-                };
 
-                 console.log(imageData);
+                const imageData = {
+                    id: (works.length + 1),
+                    title: textInput,
+                    imageUrl: photoInput,
+                    categoryId: categoryInput
+                };
+               
+
+                console.log(imageData);
                 const formData = new FormData();
-                formData.append('data', JSON.stringify(imageData)); 
+                formData.append('data', JSON.stringify(imageData));
                 fetch('http://localhost:5678/api/works/', {
                     method: 'POST',
                     headers: {
-                        Authorization: `Bearer ${token}`, 
+                        Authorization: `Bearer ${token}`,
                     },
                     body: formData
                 })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Erreur lors de la soumission des données');
-                })
-                .then(data => {
-                    console.log('Données envoyées avec succès:', data);
-                })
-                .catch(error => {
-                    console.error('Erreur:', error);
-                });
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Error sending the work');
+                    })
+                    .then(data => {
+                        console.log('Work uploaded succesfully:', data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
             });
 
-
-        })
-
-
-    }
+        }
+        showModalFormWindow();
+    })
 
 
-    
- 
+}
+
+
+
+
 
 
