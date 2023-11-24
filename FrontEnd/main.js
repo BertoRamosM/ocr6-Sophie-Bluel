@@ -10,7 +10,8 @@ import { displayAdminPage } from "./admin-main-page.js";
 
 //display gallery on load the page
 displayGallery(works);
-console.log(works)
+console.log(works);
+
 
 
 //display login screen when pressing login

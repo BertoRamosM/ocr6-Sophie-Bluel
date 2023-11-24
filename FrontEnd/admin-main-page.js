@@ -270,22 +270,17 @@ export function displayAdminPage() {
                 const token = localStorage.getItem("token");
 
 
-                const textInput = document.querySelector('.title-input').value;
+               const textInput = document.querySelector('.title-input').value;
                 const categoryInput = document.querySelector('.category-input').value;
                 const photoInput = document.querySelector('.photo-input').files[0];
 
-
-                const imageData = {
-                    id: (works.length + 1),
-                    title: textInput,
-                    imageUrl: photoInput,
-                    categoryId: categoryInput
-                };
-               
-
-                console.log(imageData);
                 const formData = new FormData();
-                formData.append('data', JSON.stringify(imageData));
+
+                formData.append("title", textInput);
+                formData.append("image", photoInput);
+                formData.append("category", parseInt(categoryInput.replace(/[^0-9]/g, '')));
+
+
                 fetch('http://localhost:5678/api/works/', {
                     method: 'POST',
                     headers: {
@@ -300,8 +295,15 @@ export function displayAdminPage() {
                         throw new Error('Error sending the work');
                     })
                     .then(data => {
-                        console.log('Work uploaded succesfully:', data);
+                        closeModal();
+                        console.log('Work uploaded successfully:', data);
+                        setTimeout(() => {
+                            works.push(data);
+                            displayGallery(works);
+                            displayModalGallery();
+                        }, 1000);
                     })
+                    
                     .catch(error => {
                         console.error('Error:', error);
                     });

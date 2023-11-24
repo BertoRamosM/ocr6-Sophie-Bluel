@@ -89,9 +89,9 @@ export const adminPage = `
       <label for="Category" class="modal-form-text">Category</label>
       <select class="category-input">
           <option value="" disabled selected></option>
-          <option value="1">Objets</option>
-          <option value="2">Appartaments</option>
-          <option value="3">Hôtels & restaurants</option>
+          <option value=1>Objets</option>
+          <option value=2>Appartaments</option>
+          <option value=3>Hôtels & restaurants</option>
       </select>
       
       <div class="border-modal"></div>
