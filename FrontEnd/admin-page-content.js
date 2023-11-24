@@ -38,12 +38,12 @@ export const adminPage = `
   <div class="modifier">
     <h2 id="gallery">Mes Projets</h2>
     <img src="./assets/icons/edit.svg" alt="edit" class="mod">
-    <p class="mod">Modifier</p>
+    <a class="mod" href="#modal-container-js">Modifier</a>
   </div>
 
 
 
-  <div class="modal-container">
+  <aside class="modal-container js-modal modal1" id="modal-container-js">
   <div class="modal">
       <h3>Gallerie photo</h3>
 
@@ -56,7 +56,58 @@ export const adminPage = `
       <button class="btn-ajouter">Ajouter un photo</button>
 
   </div>
+  </aside>
+
+
+  
+
+
+
+  <aside class="modal-container js-modal modal2" id="modal-container-js">
+  <div class="modal">
+  <h3>Ajout photo</h3>
+
+  <img src="./assets/icons/arrow-left.svg" alt="arrow-left" class="arrow-left">
+  <img src="./assets/icons/xmark.svg" alt="close-modal" class="x-modal">
+
+
+  <form class="modal-form">
+      
+      
+      <label for="file" class="custom-file-label">
+          <img src="/assets/icons/file-input.svg" alt="uplod file" class="img-input">
+          <button class="button-file-form" type="button">+ Ajouter photo</button>
+          jpg, png : 4mo max</label>
+      <input type="file" id="file" class="photo-input" accept="image/*">
+    
+  
+      
+      <label for="title" class="modal-form-text">Title</label>
+      <input type="text" class="title-input" >
+      
+
+      <label for="Category" class="modal-form-text">Category</label>
+      <select class="category-input">
+          <option value="" disabled selected></option>
+          <option value="category1">Objets</option>
+          <option value="category2">Appartaments</option>
+          <option value="category3">Hôtels & restaurants</option>
+      </select>
+      
+      <div class="border-modal"></div>
+      
+      <button type="submit" class="btn-ajouter btn-ajouter2">Valider</button>
+  </form>
+
+</div>
+
+
   </div>
+  </aside>
+
+
+
+
   <div class="back-overlay"></div>
 
 

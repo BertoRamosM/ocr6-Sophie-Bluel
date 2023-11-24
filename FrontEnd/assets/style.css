@@ -655,8 +655,38 @@ input:hover {
 	transform: translate(-50%, -50%);
 	background-color: white;
 	z-index: 99999;
-	
 
+	animation: open-modal 0.5s ease-in-out;
+	transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+@keyframes open-modal {
+	0% {
+		top: 0;
+    opacity: 0;
+	}
+
+	100% {
+		top: 2%;
+    opacity: 1;
+	}
+}
+
+.modal-container-close{
+	animation: close-modal 0.5s ease-in-out;
+	transition: top 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+
+@keyframes close-modal {
+	0% {
+		top: 2%;
+    opacity: 1;
+	}
+
+	100% {
+		top: 100%;
+    opacity: 0;
+	}
 }
 
 .modal {

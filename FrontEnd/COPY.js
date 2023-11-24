@@ -1,11 +1,10 @@
 import { displayGallery } from "./gallery.js";
 import { works } from "./main.js";
-import { adminPage} from "./admin-page-content.js";
+import { adminPage, modal1, modal2 } from "./admin-page-content.js";
 
 
 
 export function displayAdminPage() {
-
     
     document.body.innerHTML = adminPage;
 
@@ -89,8 +88,6 @@ export function displayAdminPage() {
 
     //display and hide the modal
         const back = document.querySelector(".back-overlay");
-
-        //those are the buttons that display the modal
         const displayModal = document.querySelectorAll(".mod");
         
 
@@ -112,20 +109,12 @@ export function displayAdminPage() {
     
         function closeModal() {
             modal.classList.add("modal-container-close");
-            modal1.classList.add("modal-container-close");
-            modal2.classList.add("modal-container-close");
             setTimeout(() => {
                 modal.style.display = "none";
-                modal1.style.display = "none";
-                modal2.style.display = "none";
                 back.style.display = 'none';
                 isModalVisible = false;
-                modal.classList.remove("modal-container-close");
-                modal1.classList.remove("modal-container-close");
-                modal2.classList.remove("modal-container-close");
-            }, 200);
+            }, 500);
         }
-        
     
       
        
@@ -154,26 +143,30 @@ export function displayAdminPage() {
         });
  
     
+
+function attachModal1Listeners(){
+    closeModalXButton();
+    showModalFormWindow();
+}
+
+function attachModal2Listeners(){
+    closeModalXButton();
+}
     
     //change the modal to the form to add new work
+        const modalContent = document.querySelector(".modal");
         const btnDisplayForm = document.querySelector(".btn-ajouter");
 
 
-        const modal1 = document.querySelector(".modal1");
-        const modal2 = document.querySelector(".modal2");
-
         
 
-        modal2.addEventListener("click", function(event){
+        function showModalFormWindow(){
+        btnDisplayForm.addEventListener("click", function (event) {
             event.stopPropagation();
-    
-        })
-        btnDisplayForm.addEventListener("click", function () {
-            
-            modal1.style.display = "none";
-            modal2.style.display = "block";
+            modalContent.innerHTML = "";
+            modalContent.innerHTML= modal2;
         
-            
+            attachModal2Listeners();
 
             //by default the button dosnt trigger the file exploer
             const buttonFileForm = document.querySelector('.button-file-form');
@@ -182,9 +175,17 @@ export function displayAdminPage() {
             });
 
             //left arrow functionality to go back to previous modal
-            document.querySelector(".arrow-left").addEventListener("click", function () {
-                modal1.style.display = "block";
-                modal2.style.display = "none";
+            document.querySelector(".arrow-left").addEventListener("click", function (event) {
+                event.stopPropagation();
+                modalContent.innerHTML = "";
+                modalContent.innerHTML = modal1;
+                displayModalGallery();
+                ///add here the functinos   
+                const xSign = document.querySelector(".x-modal");
+                xSign.addEventListener("click", closeModal);
+                
+               
+              
             })
             
 
@@ -216,7 +217,7 @@ export function displayAdminPage() {
             });
         
 
-           
+
             //if all inputs in the form arre filled ...
             const photoInput = document.querySelector(".photo-input");
             const textInput = document.querySelector(".title-input");
@@ -278,7 +279,6 @@ export function displayAdminPage() {
                     categoryId: categoryInput,
                     userId: 0, 
                 };
-
                  console.log(imageData);
                 const formData = new FormData();
                 formData.append('data', JSON.stringify(imageData)); 
@@ -311,6 +311,9 @@ export function displayAdminPage() {
 
 
     
- 
+   showModalFormWindow();
+
+
+}
 
 
