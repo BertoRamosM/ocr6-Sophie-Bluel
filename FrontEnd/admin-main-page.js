@@ -270,7 +270,7 @@ export function displayAdminPage() {
                 const token = localStorage.getItem("token");
 
 
-               const textInput = document.querySelector('.title-input').value;
+                const textInput = document.querySelector('.title-input').value;
                 const categoryInput = document.querySelector('.category-input').value;
                 const photoInput = document.querySelector('.photo-input').files[0];
 
@@ -303,7 +303,7 @@ export function displayAdminPage() {
                             displayModalGallery();
                         }, 1000);
                     })
-                    
+
                     .catch(error => {
                         console.error('Error:', error);
                     });
