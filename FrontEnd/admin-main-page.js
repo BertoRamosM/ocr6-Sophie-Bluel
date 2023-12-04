@@ -57,7 +57,6 @@ export function displayAdminPage() {
                         if (response.ok) {
                             console.log("work removed");
                             works.splice(i, 1);
-
                             displayModalGallery();
                             displayGallery(works);
                         } else {
@@ -134,7 +133,7 @@ export function displayAdminPage() {
 
     displayModal.forEach(displayModal => {
         displayModal.addEventListener("click", function (event) {
-            //event propagations its used toavoid closing rhe modal when clicking on it
+            //event propagations its used to avoid closing rhe modal when clicking on it
             event.stopPropagation();
             showModal();
         });
@@ -192,7 +191,7 @@ export function displayAdminPage() {
 
         const fileInput = document.getElementById('file');
         const imageFile = document.querySelector(".img-input");
-        let newImage = null;
+
 
         fileInput.addEventListener('change', function (event) {
             const file = event.target.files[0];
@@ -200,13 +199,12 @@ export function displayAdminPage() {
             if (file) {
                 const reader = new FileReader();
 
-                // When the file is read, set the background image and update file name display
-                reader.onload = function (e) {
-                    imageFile.src = e.target.result;
+                // When the file is read, set the background image and update image
+                reader.onload = function (image) {
+                    imageFile.src = image.target.result;
                     const fileLabel = document.querySelector(".custom-file-label");
                     fileLabel.innerHTML = "";
-                    fileLabel.innerHTML = `<img src="${e.target.result}" alt="uploaded file" class="img-uploaded">`;                        // Store the file in a variable
-                    newImage = file;
+                    fileLabel.innerHTML = `<img src="${image.target.result}" alt="uploaded file" class="img-uploaded">`;
                 };
 
                 // Read the file as a data URL
@@ -281,37 +279,38 @@ export function displayAdminPage() {
                 formData.append("category", parseInt(categoryInput.replace(/[^0-9]/g, '')));
 
 
-                fetch('http://localhost:5678/api/works/', {
-                    method: 'POST',
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                    body: formData
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            return response.json();
-                        }
-                        throw new Error('Error sending the work');
-                    })
-                    .then(data => {
-                        closeModal();
-                        console.log('Work uploaded successfully:', data);
-                        setTimeout(() => {
-                            works.push(data);
-                            displayGallery(works);
-                            displayModalGallery();
-                        }, 1000);
-                    })
 
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
+
+                uploadWork(formData, token)
             });
 
         }
         showModalFormWindow();
     })
+    async function uploadWork(formData, token) {
+        try {
+            const response = await fetch('http://localhost:5678/api/works/', {
+                method: 'POST',
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Error sending the work');
+            }
+
+            const data = await response.json();
+            closeModal();
+            console.log('Work uploaded successfully:', data);
+            works.push(data);
+            displayGallery(works);
+            displayModalGallery();
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
 
 
 }

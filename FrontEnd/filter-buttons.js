@@ -47,13 +47,14 @@ export function filterButtonsFunctionality() {
 }
 
 
+
+//style of pressed button
 export function toggleActive(clickedButton) {
     let buttons = document.querySelectorAll('.btn-filter');
 
     // Remove active class from all buttons
     buttons.forEach(function (button) {
         button.classList.remove('btn-filter-active');
-
     });
 
     // Add active class to the clicked button

@@ -8,8 +8,6 @@ export function displayLogin() {
     btnLogin.addEventListener("click", function () {
         mainContent.innerHTML = "";
         mainContent.innerHTML = displayLoginForm();
-
-        // Attach event listener to the login form
         loginProcess();
     });
 }
@@ -35,12 +33,11 @@ function displayLoginForm() {
         '</section>';
 }
 
-function loginProcess() {
+async function loginProcess() {
     let form = document.querySelector(".login-form");
     const animationLoader = document.querySelector(".animation-loader");
 
-
-    form.addEventListener("submit", function (event) {
+    form.addEventListener("submit", async function (event) {
         event.preventDefault();
         const redSignal = document.querySelector(".failed-login");
         const greenSignal = document.querySelector(".completed-login");
@@ -50,48 +47,37 @@ function loginProcess() {
             password: event.target.querySelector(".password-input").value,
         };
 
-        fetch('http://localhost:5678/api/users/login', {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(credentialsLogin),
-    })
-    .then(response => {
-        if (response.ok) {
-            console.log("Login successful");
-            greenSignal.style.display = "block";
-            redSignal.style.display = "none";
-            animationLoader.style.display = "block";
-            return response.json();
-        } else {
-            redSignal.style.display = "block";
-            greenSignal.style.display = "none";
-            throw new Error('Login failed');
+        try {
+            const response = await fetch('http://localhost:5678/api/users/login', {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(credentialsLogin),
+            });
+
+            if (response.ok) {
+                greenSignal.style.display = "block";
+                redSignal.style.display = "none";
+                animationLoader.style.display = "block";
+                const data = await response.json();
+                const token = data.token;
+                window.localStorage.setItem("token", token);
+
+                console.log("Login successful");
+                console.log(`token : ${token}`);
+                
+                setTimeout(displayAdminPage, 1000);
+            } else {
+                redSignal.style.display = "block";
+                greenSignal.style.display = "none";
+                throw new Error('Login failed');
+            }
+        } catch (error) {
+            console.log(error);
         }
-    })
-    .then(data => {
-        const token = data.token;
-        window.localStorage.setItem("token", token);
-        //log the token to check its fine, can delete later
-        console.log(`token : ${token}`);
-        setTimeout(displayAdminPage, 1000);
-    })
-    .catch(error => {
-        console.log(error);
     });
-});
 
-
-
-        
-
-        
- 
-
-
-const logoHead = document.querySelector(".head-title");
-logoHead.addEventListener("click", function () {
-    location.href = "/index.html";
-})
-
-
+    const logoHead = document.querySelector(".head-title");
+    logoHead.addEventListener("click", function () {
+        location.href = "/index.html";
+    });
 }
